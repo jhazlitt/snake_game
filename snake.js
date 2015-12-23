@@ -27,8 +27,10 @@ function playGame() {
 	});
 	
 	gameInterval = setInterval(function(){
-		moveSegment('.segment');
-		correctPosition('.segment');
+		for (i = 0; i < segments.length; i++) {
+			moveSegment(segments[i].ID);
+			correctPosition(segments[i].ID);
+		}
 	}, 150);
 }
 
@@ -67,10 +69,9 @@ function generateFood() {
 	var foodTop = Math.floor(Math.random() * 12) * 50;
 	var foodLeft = Math.floor(Math.random() * 16) * 50;
 
-	foodCount += 1;
-	$('#game').append("<div class='food' id='food" + foodCount + "'></div>");
-	$('#food' + foodCount + '').css("top", "" + foodTop + "px");
-	$('#food' + foodCount + '').css("left", "" + foodLeft + "px");
+	$('#game').append("<div class='food'></div>");
+	$('.food').css("top", "" + foodTop + "px");
+	$('.food').css("left", "" + foodLeft + "px");
 }
 
 function correctPosition(ID) {
