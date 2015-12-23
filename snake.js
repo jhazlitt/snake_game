@@ -14,16 +14,19 @@ function playGame() {
 	// Game controls
 	$(document).keydown(function(evt) {
 		if (evt.keyCode === 37) {
-			direction = "left";
+			segments[segments.length - 1].direction = "left";
 		}
 		else if (evt.keyCode === 38) {
-			direction = "up";
+			segments[segments.length - 1].direction = "up";
 		}
 		else if (evt.keyCode === 39) {
-			direction = "right";
+			segments[segments.length - 1].direction = "right";
 		}
 		else if (evt.keyCode === 40) {
-			direction = "down";
+			segments[segments.length - 1].direction = "down";
+		}
+		else if (evt.keyCode === 80) {
+			clearInterval(gameInterval);
 		}
 	});
 	
@@ -31,24 +34,45 @@ function playGame() {
 		var foodTop = $('.food').position().top;
 		var foodLeft = $('.food').position().left;
 
-		for (i = 0; i < segments.length; i++) {
-			var segmentID = segments[i].ID;
-			var segmentTop = $(segmentID).position().top;
-			var segmentLeft = $(segmentID).position().left;	
+		var segmentID = segments[segments.length - 1].ID;
+		var segmentDirection = segments[segments.length - 1].direction;
+		var segmentTop = $(segmentID).position().top;
+		var segmentLeft = $(segmentID).position().left;	
 
-			// Check for segment collision with food
-			if ((segmentTop === foodTop) && (segmentLeft === foodLeft)) {
-				$('.food').remove();
-		//		foodTop = "";
-		//		foodLeft = "";
-				generateFood();
+		// Check for snake head collision with food
+		if ((segmentTop === foodTop) && (segmentLeft === foodLeft)) {
+			$('.food').remove();
+			if (segmentDirection === 'up') {
+				addSegment('' + (segmentTop - 50) + 'px', '' + segmentLeft + 'px', segmentDirection);
 			}
-			else {
-				moveSegment(segmentID);
+			else if (segmentDirection === 'down') {
+				addSegment('' + (segmentTop + 50) + 'px', '' + segmentLeft + 'px', segmentDirection);
+			}
+			else if (segmentDirection === 'left') {
+				addSegment('' + segmentTop + 'px', '' + (segmentLeft - 50) + 'px', segmentDirection);
+			}
+			else if (segmentDirection === 'right') {
+				addSegment('' + segmentTop + 'px', '' + (segmentLeft + 50) + 'px', segmentDirection);
+			}
+			generateFood();
+		}
+		else {
+			for (i = segments.length - 1; i >= 0; i--) {
+				segmentID = segments[i].ID;
+				segmentDirection = segments[i].direction;
+				moveSegment(segmentID, segmentDirection);
 				correctPosition(segmentID);
+				$(segmentID).text(segmentID + " " + segmentDirection);
+			}
+			// For all of the snake segments except the head, propogate the direction down the snake
+			for (i = 0; i < segments.length - 1; i++) {
+				segmentID = segments[i].ID;
+				segmentDirection = segments[i].direction;
+				
+				segments[i].direction = segments[i + 1].direction;	
 			}
 		}
-	}, 150);
+	}, 500);
 }
 
 function setupGame() {
@@ -57,7 +81,7 @@ function setupGame() {
 	playGame();
 }
 
-function moveSegment(ID) {
+function moveSegment(ID, direction) {
 	if (direction === 'up') {
 		$(ID).css("top", "-=50px");
 	}
@@ -95,7 +119,6 @@ function correctPosition(ID) {
 	var topPosition = $(ID).position().top;
 	var leftPosition = $(ID).position().left;
 
-	$(ID).text(topPosition + ", " + leftPosition);	
 	if (topPosition < 0) {
 		$(ID).css("top", "550px");
 	}
