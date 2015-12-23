@@ -36,6 +36,21 @@ $(document).ready(function(){
 	}, 150);
 });
 
+function Segment(ID, direction) {
+	this.ID = ID;
+	this.direction = direction;
+}
+
+function addSegment(segmentTop, segmentLeft, direction) {
+	segmentCount = segments.length;
+	segmentID = "#segment" + segmentCount + "";
+	
+	$('#game').append("<div class='segment' id='segment" + segmentCount + "'></div>");
+	$(segmentID).css("top", segmentTop);
+	$(segmentID).css("left", segmentLeft);	
+	segments.push(new Segment(segmentID, direction));
+}
+
 function generateFood() {
 	var foodTop = Math.floor(Math.random() * 12) * 50;
 	var foodLeft = Math.floor(Math.random() * 16) * 50;
@@ -44,7 +59,6 @@ function generateFood() {
 	$('#game').append("<div class='food' id='food" + foodCount + "'></div>");
 	$('#food' + foodCount + '').css("top", "" + foodTop + "px");
 	$('#food' + foodCount + '').css("left", "" + foodLeft + "px");
-	
 }
 
 function correctPosition(ID) {
