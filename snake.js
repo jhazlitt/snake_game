@@ -2,6 +2,7 @@ var direction = 'right';
 var segments = [];
 var foodCount = 0;
 
+// Snake segment constructor
 function Segment(ID, direction) {
 	this.ID = ID;
 	this.direction = direction;
@@ -27,9 +28,25 @@ function playGame() {
 	});
 	
 	gameInterval = setInterval(function(){
+		var foodTop = $('.food').position().top;
+		var foodLeft = $('.food').position().left;
+
 		for (i = 0; i < segments.length; i++) {
-			moveSegment(segments[i].ID);
-			correctPosition(segments[i].ID);
+			var segmentID = segments[i].ID;
+			var segmentTop = $(segmentID).position().top;
+			var segmentLeft = $(segmentID).position().left;	
+
+			// Check for segment collision with food
+			if ((segmentTop === foodTop) && (segmentLeft === foodLeft)) {
+				$('.food').remove();
+		//		foodTop = "";
+		//		foodLeft = "";
+				generateFood();
+			}
+			else {
+				moveSegment(segmentID);
+				correctPosition(segmentID);
+			}
 		}
 	}, 150);
 }
