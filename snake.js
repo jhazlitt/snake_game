@@ -2,6 +2,11 @@ var direction = 'right';
 var segments = [];
 var foodCount = 0;
 
+function Segment(ID, direction) {
+	this.ID = ID;
+	this.direction = direction;
+}
+
 $(document).ready(setupGame);
 
 function playGame() {
@@ -22,7 +27,7 @@ function playGame() {
 	});
 	
 	gameInterval = setInterval(function(){
-		moveSegment();
+		moveSegment('.segment');
 		correctPosition('.segment');
 	}, 150);
 }
@@ -33,23 +38,18 @@ function setupGame() {
 	playGame();
 }
 
-function Segment(ID, direction) {
-	this.ID = ID;
-	this.direction = direction;
-}
-
-function moveSegment() {
+function moveSegment(ID) {
 	if (direction === 'up') {
-		$('.segment').css("top", "-=50px");
+		$(ID).css("top", "-=50px");
 	}
 	else if (direction === 'down') {
-		$('.segment').css("top", "+=50px");
+		$(ID).css("top", "+=50px");
 	}
 	else if (direction === 'left') {
-		$('.segment').css("left", "-=50px");	
+		$(ID).css("left", "-=50px");	
 	}
 	else if (direction === 'right') {
-		$('.segment').css("left", "+=50px");
+		$(ID).css("left", "+=50px");
 	}
 }
 
