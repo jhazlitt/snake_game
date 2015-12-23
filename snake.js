@@ -54,6 +54,7 @@ function playGame() {
 			else if (segmentDirection === 'right') {
 				addSegment('' + segmentTop + 'px', '' + (segmentLeft + 50) + 'px', segmentDirection);
 			}
+			correctPosition(segments[segments.length - 1].ID);
 			generateFood();
 		}
 		else {
@@ -62,7 +63,7 @@ function playGame() {
 				segmentDirection = segments[i].direction;
 				moveSegment(segmentID, segmentDirection);
 				correctPosition(segmentID);
-				$(segmentID).text(segmentID + " " + segmentDirection);
+				// $(segmentID).text(segmentID + " " + segmentDirection);
 			}
 			// For all of the snake segments except the head, propogate the direction down the snake
 			for (i = 0; i < segments.length - 1; i++) {
@@ -72,7 +73,7 @@ function playGame() {
 				segments[i].direction = segments[i + 1].direction;	
 			}
 		}
-	}, 500);
+	}, 150);
 }
 
 function setupGame() {

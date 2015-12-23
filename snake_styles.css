@@ -3,19 +3,23 @@
 	width: 800px;
 	background-color:gray;
 	margin: auto;
-	position: absolute;
+	position: relative;
 }
 
 .food {
 	height: 50px;
 	width: 50px;
+	border-radius: 10px;
 	position: absolute;
 	background-color: green;
+	z-index: 2;
 }
 
 .segment {
 	height: 50px;
 	width: 50px;
+	border-radius: 10px;
 	position: absolute;
 	background-color: blue;
+	z-index: 3;
 }
