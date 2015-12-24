@@ -14,16 +14,24 @@ function playGame() {
 	// Game controls
 	$(document).keydown(function(evt) {
 		if (evt.keyCode === 37) {
-			segments[segments.length - 1].direction = "left";
+			if (!bodyCollision('left')) {
+				segments[segments.length - 1].direction = "left";
+			}
 		}
 		else if (evt.keyCode === 38) {
-			segments[segments.length - 1].direction = "up";
+			if (!bodyCollision('up')) {
+				segments[segments.length - 1].direction = "up";
+			}
 		}
 		else if (evt.keyCode === 39) {
-			segments[segments.length - 1].direction = "right";
+			if (!bodyCollision('right')) {
+				segments[segments.length - 1].direction = "right";
+			}
 		}
 		else if (evt.keyCode === 40) {
-			segments[segments.length - 1].direction = "down";
+			if (!bodyCollision('down')) {
+				segments[segments.length - 1].direction = "down";
+			}
 		}
 		else if (evt.keyCode === 80) {
 			clearInterval(gameInterval);
@@ -63,7 +71,6 @@ function playGame() {
 				segmentDirection = segments[i].direction;
 				moveSegment(segmentID, segmentDirection);
 				correctPosition(segmentID);
-				// $(segmentID).text(segmentID + " " + segmentDirection);
 			}
 			// For all of the snake segments except the head, propogate the direction down the snake
 			for (i = 0; i < segments.length - 1; i++) {
@@ -76,8 +83,40 @@ function playGame() {
 	}, 150);
 }
 
+// This function prevents the user from controlling the snake to double back over itself
+function bodyCollision(direction) {
+	var headID = segments[segments.length - 1].ID;
+	var headTop = $(headID).position().top;
+	var headLeft = $(headID).position().left;	
+	var adjacentID = segments[segments.length - 2].ID;
+	var adjacentTop = $(adjacentID).position().top;
+	var adjacentLeft = $(adjacentID).position().left;
+	// Look for body sections adjacent to the direction the snake is heading
+	if (direction === 'up') {
+		headTop -= 50;
+	}
+	else if (direction === 'down') {
+		headTop += 50;
+	}
+	else if (direction === 'left') {
+		headLeft -= 50;
+	}
+	else if (direction === 'right') {
+		headLeft += 50;
+	}
+
+	if ((headTop === adjacentTop) && (headLeft === adjacentLeft)) {
+		return true;
+	}	
+	else {
+		return false;
+	}	
+}
+
 function setupGame() {
 	addSegment('0px', '0px', 'right');	
+	addSegment('0px', '50px', 'right');
+	addSegment('0px', '100px', 'right');
 	generateFood();
 	playGame();
 }
