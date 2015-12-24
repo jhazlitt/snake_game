@@ -8,9 +8,21 @@ function Segment(ID, direction) {
 	this.direction = direction;
 }
 
-$(document).ready(setupGame);
+$(document).ready(titleScreen);
 
-function playGame() {
+function playGame(difficulty) {
+	// Set speed based on selected difficulty
+	var speed;
+	if (difficulty === 'easy') {
+		speed = 300;
+	}
+	else if (difficulty === 'medium') {
+		speed = 150;
+	}
+	else if (difficulty === 'hard') {
+		speed = 75;
+	}
+	
 	// Game controls
 	$(document).keydown(function(evt) {
 		if (evt.keyCode === 37) {
@@ -84,7 +96,7 @@ function playGame() {
 				segments[i].direction = segments[i + 1].direction;	
 			}
 		}
-	}, 150);
+	}, speed);
 }
 
 // This function detects any collisions between the head of the snake and the body
@@ -137,12 +149,47 @@ function adjacentCollision(direction) {
 	}	
 }
 
-function setupGame() {
+function titleScreen() {
+	// Add title elements to the screen
+	$('#game').append('<div id="title_screen"></div>');
+	$('#title_screen').append('<h1 style="font-size: 80px">SNAKE</h1>');
+	$('#title_screen').append('<h1>Use arrow keys to move</h1>');
+	$('#title_screen').append('<div class="difficulty_button" id="easy_button"><h1 style="font-size: 40px">EASY</h1></div>');
+	$('#title_screen').append('<div class="difficulty_button" id="medium_button"><h1 style="font-size: 40px">MEDIUM</h1></div>');
+	$('#title_screen').append('<div class="difficulty_button" id="hard_button"><h1 style="font-size: 40px">HARD</h1></div>');
+
+	highlightButton('#easy_button');
+	highlightButton('#medium_button');
+	highlightButton('#hard_button');
+	
+	$('#easy_button').click(function() {
+		setupGame('easy');
+	});
+	$('#medium_button').click(function() {
+		setupGame('medium');
+	});
+	$('#hard_button').click(function() {
+		setupGame('hard');
+	});
+}
+
+function highlightButton(ID) {
+	$(ID).hover(function() {
+		$(ID).css('background-color', 'white');
+	}, function() {
+		$(ID).css('background-color', 'gray');
+	});
+
+}
+
+function setupGame(difficulty) {
+	// Hide the title menu
+	$('#title_screen').remove();
 	addSegment('0px', '0px', 'right');	
 	addSegment('0px', '50px', 'right');
 	addSegment('0px', '100px', 'right');
 	generateFood();
-	playGame();
+	playGame(difficulty);
 }
 
 function moveSegment(ID, direction) {
