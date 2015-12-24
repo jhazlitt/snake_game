@@ -1,7 +1,13 @@
+body {
+/*	background-color: #D5D6DD; */
+	background-color: #C1FFC1;
+}
+
 #game {
 	height: 600px;
 	width: 800px;
-	background-color:gray;
+	border: 10px solid #8B67A5;
+	background-color: #FF8247;
 	margin: auto;
 	position: relative;
 }
@@ -11,7 +17,7 @@
 	width: 50px;
 	border-radius: 10px;
 	position: absolute;
-	background-color: green;
+	background-color: #B6FCD5;
 	z-index: 2;
 }
 
@@ -20,6 +26,6 @@
 	width: 50px;
 	border-radius: 10px;
 	position: absolute;
-	background-color: blue;
+	background-color: #777777;
 	z-index: 3;
 }

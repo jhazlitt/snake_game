@@ -14,22 +14,22 @@ function playGame() {
 	// Game controls
 	$(document).keydown(function(evt) {
 		if (evt.keyCode === 37) {
-			if (!bodyCollision('left')) {
+			if (!adjacentCollision('left')) {
 				segments[segments.length - 1].direction = "left";
 			}
 		}
 		else if (evt.keyCode === 38) {
-			if (!bodyCollision('up')) {
+			if (!adjacentCollision('up')) {
 				segments[segments.length - 1].direction = "up";
 			}
 		}
 		else if (evt.keyCode === 39) {
-			if (!bodyCollision('right')) {
+			if (!adjacentCollision('right')) {
 				segments[segments.length - 1].direction = "right";
 			}
 		}
 		else if (evt.keyCode === 40) {
-			if (!bodyCollision('down')) {
+			if (!adjacentCollision('down')) {
 				segments[segments.length - 1].direction = "down";
 			}
 		}
@@ -46,7 +46,11 @@ function playGame() {
 		var segmentDirection = segments[segments.length - 1].direction;
 		var segmentTop = $(segmentID).position().top;
 		var segmentLeft = $(segmentID).position().left;	
-
+		
+		// Check for snake collision with itself
+		if (bodyCollision()) {
+			alert("GAME OVER");
+		}
 		// Check for snake head collision with food
 		if ((segmentTop === foodTop) && (segmentLeft === foodLeft)) {
 			$('.food').remove();
@@ -83,8 +87,28 @@ function playGame() {
 	}, 150);
 }
 
+// This function detects any collisions between the head of the snake and the body
+function bodyCollision() {
+	var headID = segments[segments.length - 1].ID;
+	var headTop = $(headID).position().top;
+	var headLeft = $(headID).position().left;
+	var segmentID;
+	var segmentTop;
+	var segmentLeft;
+
+	for (i = 0; i < segments.length - 2; i++) {
+		segmentID = segments[i].ID;
+		segmentTop = $(segmentID).position().top;
+		segmentLeft = $(segmentID).position().left;
+		if ((headTop === segmentTop) && (headLeft === segmentLeft)) {
+			return true;
+		}
+	}
+	return false;
+}
+
 // This function prevents the user from controlling the snake to double back over itself
-function bodyCollision(direction) {
+function adjacentCollision(direction) {
 	var headID = segments[segments.length - 1].ID;
 	var headTop = $(headID).position().top;
 	var headLeft = $(headID).position().left;	
