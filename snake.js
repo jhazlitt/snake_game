@@ -11,16 +11,20 @@ function Segment(ID, direction) {
 $(document).ready(titleScreen);
 
 function playGame(difficulty) {
-	// Set speed based on selected difficulty
+	// Set speed and score multiplier based on selected difficulty
 	var speed;
+	var scoreMultiplier;
 	if (difficulty === 'easy') {
 		speed = 300;
+		scoreMultiplier = 1;
 	}
 	else if (difficulty === 'medium') {
 		speed = 150;
+		scoreMultiplier = 2;
 	}
 	else if (difficulty === 'hard') {
 		speed = 75;
+		scoreMultiplier = 3;
 	}
 	
 	// Game controls
@@ -61,7 +65,7 @@ function playGame(difficulty) {
 		
 		// Check for snake collision with itself
 		if (bodyCollision()) {
-			alert("GAME OVER");
+			gameOver(scoreMultiplier);
 		}
 		// Check for snake head collision with food
 		if ((segmentTop === foodTop) && (segmentLeft === foodLeft)) {
@@ -173,9 +177,25 @@ function titleScreen() {
 	});
 }
 
+function gameOver(scoreMultiplier) {
+	var score = (segments.length - 3) * scoreMultiplier;
+	clearInterval(gameInterval);
+	$('#game').append('<div id="title_screen"></div>');
+	$('#title_screen').append('<h1 style="font-size: 60px">GAME OVER</h1>');
+	$('#title_screen').append('<h1 style="font-size: 40px">SCORE: ' + score + '</h1>');
+	$('#title_screen').append('<div class="restart_button"></div>');
+	$('.restart_button').append('<h1 style="font-size: 40px">Play again?</ha');
+
+	highlightButton('.restart_button');
+	
+	$('.restart_button').click(function() {
+		location.reload();
+	});
+}
+
 function highlightButton(ID) {
 	$(ID).hover(function() {
-		$(ID).css('background-color', 'white');
+		$(ID).css('background-color', '#C1FFC1');
 	}, function() {
 		$(ID).css('background-color', 'gray');
 	});
