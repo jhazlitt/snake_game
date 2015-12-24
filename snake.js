@@ -147,8 +147,27 @@ function addSegment(segmentTop, segmentLeft, direction) {
 }
 
 function generateFood() {
-	var foodTop = Math.floor(Math.random() * 12) * 50;
-	var foodLeft = Math.floor(Math.random() * 16) * 50;
+	var foodTop;
+	var foodLeft;
+	var segmentID;
+	var segmentTop;
+	var segmentLeft;
+	var collision = true;
+
+	while (collision) {
+		foodTop = Math.floor(Math.random() * 12) * 50;
+		foodLeft = Math.floor(Math.random() * 16) * 50;
+		
+		collision = false;	
+		for (i = 0; i < segments.length; i++) {
+			segmentID = segments[i].ID;
+			segmentTop = $(segmentID).position().top;
+			segmentLeft = $(segmentID).position().left;			
+			if ((foodTop === segmentTop) && (foodLeft === segmentLeft)) {
+				collision = true;
+			}
+		}
+	}
 
 	$('#game').append("<div class='food'></div>");
 	$('.food').css("top", "" + foodTop + "px");
